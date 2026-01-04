@@ -1,0 +1,13 @@
+{
+    "name": "hexlet/code",
+    "type": "project",
+    "description": "Web application for SEO page analysis",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Petrova Anna",
+            "email": "petr230999@gmail.com"
+        }
+    ],
+    "require": {}
+}
