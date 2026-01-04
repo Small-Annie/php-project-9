@@ -9,5 +9,8 @@
             "email": "petr230999@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "slim/slim": "^4.15",
+        "slim/psr7": "^1.8"
+    }
 }
