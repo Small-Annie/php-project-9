@@ -3,7 +3,7 @@
 
 # Описание
 
-["Page Analyzer"](https://php-project-9-2zw6.onrender.com) — сайт, который анализирует указанные страницы на SEO пригодность.
+["Анализатор страниц"](https://php-project-9-2zw6.onrender.com) — сайт, который анализирует указанные страницы на SEO пригодность.
 
 # Description
 
