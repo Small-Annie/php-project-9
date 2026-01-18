@@ -24,6 +24,10 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/"
-        }
+        },
+        "files": [
+            "src/Helpers/render.php",
+            "src/Helpers/redirectTo.php"
+        ]
     }
 }
