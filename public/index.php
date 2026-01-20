@@ -98,9 +98,7 @@ $app->post('/urls', function (Request $request, Response $response) {
 $app->get('/urls', function (Request $request, Response $response) {
     $repository = $this->get(UrlRepository::class);
 
-    $urls = collect($repository->getAll())
-        ->sortByDesc('created_at')
-        ->values();
+    $urls = $repository->getAll();
 
     return render($this, $request, $response, 'urls/index.phtml', [
         'urls' => $urls
