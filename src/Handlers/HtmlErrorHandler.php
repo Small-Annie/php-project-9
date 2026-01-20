@@ -33,6 +33,12 @@ class HtmlErrorHandler
 
     private function log(Throwable $exception): void
     {
+        $logDir = __DIR__ . '/../../storage/logs';
+
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0777, true);
+        }
+
         $message = sprintf(
             "[%s] %s in %s:%d\n%s\n\n",
             date('Y-m-d H:i:s'),
@@ -43,7 +49,7 @@ class HtmlErrorHandler
         );
 
         file_put_contents(
-            __DIR__ . '/../../storage/logs/app.log',
+            $logDir . '/app.log',
             $message,
             FILE_APPEND
         );
