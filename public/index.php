@@ -59,10 +59,10 @@ $app->add(new FlashMiddleware($container->get('flash')));
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $errorMiddleware->setErrorHandler(
     HttpNotFoundException::class,
-    new HtmlErrorHandler($container, 'errors/404.phtml', 404)
+    new HtmlErrorHandler($container, 'errors/404.html', 404)
 );
 $errorMiddleware->setDefaultErrorHandler(
-    new HtmlErrorHandler($container, 'errors/500.phtml', 500)
+    new HtmlErrorHandler($container, 'errors/500.html', 500)
 );
 
 $app->get('/', function (Request $request, Response $response) {
