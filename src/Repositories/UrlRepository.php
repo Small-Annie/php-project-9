@@ -39,7 +39,7 @@ class UrlRepository
             'SELECT * FROM urls ORDER BY created_at DESC'
         );
 
-        return $stmt->fetchAll();
+        return $stmt->fetchAll() ?: [];
     }
 
     public function create(string $name, string $createdAt): int
