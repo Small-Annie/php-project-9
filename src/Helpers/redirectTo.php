@@ -1,16 +1,17 @@
 <?php
 
+use Slim\Routing\RouteContext;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 function redirectTo(
-    $app,
     ServerRequestInterface $request,
     ResponseInterface $response,
     string $routeName,
     array $params = []
 ): ResponseInterface {
-    $routeParser = $app->getRouteCollector()->getRouteParser();
+    $routeContext = RouteContext::fromRequest($request);
+    $routeParser = $routeContext->getRouteParser();
 
     return $response
         ->withHeader('Location', $routeParser->urlFor($routeName, $params))

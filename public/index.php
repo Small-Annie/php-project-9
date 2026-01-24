@@ -87,12 +87,12 @@ $app->post('/urls', function (Request $request, Response $response) {
 
     if ($existing = $repository->findByName($normalizedUrl)) {
         $flash->addMessage('success', 'Страница уже существует');
-        return redirectTo($app, $request, $response, 'urls.show', ['id' => $existing['id']]);
+        return redirectTo($request, $response, 'urls.show', ['id' => $existing['id']]);
     }
 
     $id = $repository->create($normalizedUrl, Carbon::now()->format('Y-m-d H:i:s'));
     $flash->addMessage('success', 'Страница успешно добавлена');
-    return redirectTo($app, $request, $response, 'urls.show', ['id' => $id]);
+    return redirectTo($request, $response, 'urls.show', ['id' => $id]);
 })->setName('urls.store');
 
 $app->get('/urls', function (Request $request, Response $response) {
