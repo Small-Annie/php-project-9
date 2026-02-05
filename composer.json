@@ -16,7 +16,8 @@
         "slim/flash": "^0.4.0",
         "php-di/php-di": "^7.1",
         "vlucas/valitron": "^1.4",
-        "illuminate/support": "^12.46"
+        "illuminate/support": "^12.46",
+        "guzzlehttp/guzzle": "^7.10"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^4.0"
