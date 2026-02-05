@@ -138,6 +138,6 @@ $app->post('/urls/{id}/checks', function (Request $request, Response $response, 
     $checkRepository->create($urlId, Carbon::now()->format('Y-m-d H:i:s'));
     $flash->addMessage('success', 'Страница успешно проверена');
     return redirectTo($request, $response, 'urls.show', ['id' => $urlId]);
-})->setName('urls.checks.store');;
+})->setName('urls.checks.store');
 
 $app->run();
