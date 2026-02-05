@@ -14,8 +14,6 @@ function render(
 ): ResponseInterface {
     $renderer = $container->get('renderer');
 
-    $content = $renderer->fetch($template, $params);
-
     $path = $request->getUri()->getPath();
 
     $activePage = match ($path) {
@@ -24,9 +22,8 @@ function render(
         default => null,
     };
 
-    return $renderer->render($response, 'layout.phtml', [
-        'content' => $content,
+    return $renderer->render($response, $template, array_merge($params, [
         'flash' => $request->getAttribute('flash', []),
         'activePage' => $activePage,
-    ]);
+    ]));
 }

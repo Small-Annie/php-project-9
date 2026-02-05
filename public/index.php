@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Factory\AppFactory;
 use Slim\Views\PhpRenderer;
+use Slim\Flash\Messages;
 use Carbon\Carbon;
 use DI\Container;
 
@@ -44,11 +45,14 @@ $container->set(PDO::class, function () {
 });
 
 $container->set('flash', function () {
-    return new Slim\Flash\Messages();
+    return new Messages();
 });
 
 $container->set('renderer', function () {
-    return new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+    $renderer = new PhpRenderer(__DIR__ . '/../templates');
+    $renderer->setLayout('layout.phtml');
+
+    return $renderer;
 });
 
 $app = AppFactory::createFromContainer($container);
@@ -85,20 +89,20 @@ $app->post('/urls', function (Request $request, Response $response) {
 
     $normalizedUrl = UrlNormalizer::normalize($data['name']);
 
-    if ($existing = $repository->findByName($normalizedUrl)) {
+    if ($existing = $urlRepository->findByName($normalizedUrl)) {
         $flash->addMessage('success', 'Страница уже существует');
         return redirectTo($request, $response, 'urls.show', ['id' => $existing['id']]);
     }
 
-    $id = $repository->create($normalizedUrl, Carbon::now()->format('Y-m-d H:i:s'));
+    $id = $urlRepository->create($normalizedUrl, Carbon::now()->format('Y-m-d H:i:s'));
     $flash->addMessage('success', 'Страница успешно добавлена');
     return redirectTo($request, $response, 'urls.show', ['id' => $id]);
 })->setName('urls.store');
 
 $app->get('/urls', function (Request $request, Response $response) {
-    $repository = $this->get(UrlRepository::class);
+    $urlRepository = $this->get(UrlRepository::class);
 
-    $urls = $repository->getAll();
+    $urls = $urlRepository->getAll();
 
     return render($this, $request, $response, 'urls/index.phtml', [
         'urls' => $urls
@@ -106,10 +110,10 @@ $app->get('/urls', function (Request $request, Response $response) {
 })->setName('urls.index');
 
 $app->get('/urls/{id}', function (Request $request, Response $response, array $args) {
-    $repository = $this->get(UrlRepository::class);
+    $urlRepository = $this->get(UrlRepository::class);
 
     $id = (int) $args['id'];
-    $url = $repository->find($id);
+    $url = $urlRepository->find($id);
 
     if ($url === null) {
         throw new HttpNotFoundException($request);
