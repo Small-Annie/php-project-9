@@ -36,10 +36,18 @@ class UrlRepository
     public function getAll(): array
     {
         $stmt = $this->pdo->query(
-            'SELECT * FROM urls ORDER BY created_at DESC'
+            'SELECT
+                urls.id,
+                urls.name,
+                MAX(url_checks.created_at) AS last_check_at,
+                MAX(url_checks.status_code) AS status_code
+             FROM urls
+             LEFT JOIN url_checks ON urls.id = url_checks.url_id
+             GROUP BY urls.id, urls.name
+             ORDER BY urls.created_at DESC'
         );
 
-        return $stmt->fetchAll() ?: [];
+        return $stmt->fetchAll();
     }
 
     public function create(string $name, string $createdAt): int

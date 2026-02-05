@@ -14,6 +14,7 @@ use DI\Container;
 use App\Utils\UrlNormalizer;
 use App\Validators\UrlValidator;
 use App\Repositories\UrlRepository;
+use App\Repositories\UrlCheckRepository;
 use App\Middleware\FlashMiddleware;
 use App\Handlers\HtmlErrorHandler;
 
@@ -75,7 +76,7 @@ $app->get('/', function (Request $request, Response $response) {
 
 $app->post('/urls', function (Request $request, Response $response) {
     $flash = $this->get('flash');
-    $repository = $this->get(UrlRepository::class);
+    $urlRepository = $this->get(UrlRepository::class);
 
     $data = $request->getParsedBody()['url'] ?? [];
     $errors = UrlValidator::validate($data);
@@ -119,10 +120,24 @@ $app->get('/urls/{id}', function (Request $request, Response $response, array $a
         throw new HttpNotFoundException($request);
     }
 
+    $checkRepository = $this->get(UrlCheckRepository::class);
+    $checks = $checkRepository->findByUrlId($id);
+
     return render($this, $request, $response, 'urls/show.phtml', [
         'url' => $url,
-        'checks' => [], // позже
+        'checks' => $checks,
     ]);
 })->setName('urls.show');
+
+$app->post('/urls/{id}/checks', function (Request $request, Response $response, array $args) {
+    $flash = $this->get('flash');
+    $checkRepository = $this->get(UrlCheckRepository::class);
+
+    $urlId = (int) $args['id'];
+
+    $checkRepository->create($urlId, Carbon::now()->format('Y-m-d H:i:s'));
+    $flash->addMessage('success', 'Страница успешно проверена');
+    return redirectTo($request, $response, 'urls.show', ['id' => $urlId]);
+})->setName('urls.checks.store');;
 
 $app->run();
