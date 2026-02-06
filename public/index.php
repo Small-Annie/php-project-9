@@ -17,6 +17,7 @@ use App\Repositories\UrlRepository;
 use App\Repositories\UrlCheckRepository;
 use App\Middleware\FlashMiddleware;
 use App\Handlers\HtmlErrorHandler;
+use App\Services\PageChecker;
 
 session_start();
 
@@ -131,12 +132,30 @@ $app->get('/urls/{id}', function (Request $request, Response $response, array $a
 
 $app->post('/urls/{id}/checks', function (Request $request, Response $response, array $args) {
     $flash = $this->get('flash');
+    $urlRepository = $this->get(UrlRepository::class);
     $checkRepository = $this->get(UrlCheckRepository::class);
 
     $urlId = (int) $args['id'];
+    $url = $urlRepository->find($urlId);
 
-    $checkRepository->create($urlId, Carbon::now()->format('Y-m-d H:i:s'));
-    $flash->addMessage('success', 'Страница успешно проверена');
+    if ($url === null) {
+        throw new HttpNotFoundException($request);
+    }
+
+    try {
+        $pageChecker = new PageChecker();
+        $statusCode = $pageChecker->check($url['name']);
+
+        $checkRepository->create(
+            $urlId,
+            $statusCode,
+            Carbon::now()->format('Y-m-d H:i:s')
+        );
+
+        $flash->addMessage('success', 'Страница успешно проверена');
+    } catch (\Throwable $exception) {
+        $flash->addMessage('error', 'Произошла ошибка при проверке, не удалось подключиться');
+    }
     return redirectTo($request, $response, 'urls.show', ['id' => $urlId]);
 })->setName('urls.checks.store');
 
