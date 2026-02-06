@@ -144,11 +144,14 @@ $app->post('/urls/{id}/checks', function (Request $request, Response $response, 
 
     try {
         $pageChecker = new PageChecker();
-        $statusCode = $pageChecker->check($url['name']);
+        $pageCheckResult = $pageChecker->check($url['name']);
 
         $checkRepository->create(
             $urlId,
-            $statusCode,
+            $pageCheckResult['status_code'],
+            $pageCheckResult['h1'],
+            $pageCheckResult['title'],
+            $pageCheckResult['description'],
             Carbon::now()->format('Y-m-d H:i:s')
         );
 

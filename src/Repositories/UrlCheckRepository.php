@@ -13,15 +13,29 @@ class UrlCheckRepository
         $this->pdo = $pdo;
     }
 
-    public function create(int $urlId, int $statusCode, string $createdAt): void
-    {
+    public function create(
+        int $urlId,
+        int $statusCode,
+        ?string $h1,
+        ?string $title,
+        ?string $description,
+        string $createdAt
+    ): void {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO url_checks (url_id, status_code, created_at)
-             VALUES (:url_id, :status_code, :created_at)'
+            'INSERT INTO url_checks (
+                url_id, status_code, h1, title, description, created_at
+            )
+             VALUES (
+                :url_id, :status_code, :h1, :title, :description, :created_at
+            )'
         );
+
         $stmt->execute([
             'url_id' => $urlId,
             'status_code' => $statusCode,
+            'h1' => $h1,
+            'title' => $title,
+            'description' => $description,
             'created_at' => $createdAt,
         ]);
     }
