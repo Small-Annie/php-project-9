@@ -23,8 +23,8 @@ jobs:
       - name: Run linter
         run: make lint
 
-      - name: Run SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
+      - name: Run SonarQube scan
+        uses: SonarSource/sonarqube-scan-action@v6
         with:
           projectBaseDir: .
         env:
