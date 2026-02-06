@@ -155,7 +155,11 @@ $app->post('/urls/{id}/checks', function (Request $request, Response $response, 
             Carbon::now()->format('Y-m-d H:i:s')
         );
 
-        $flash->addMessage('success', 'Страница успешно проверена');
+        if ($pageCheckResult['status_code'] === 200) {
+            $flash->addMessage('success', 'Страница успешно проверена');
+        } else {
+            $flash->addMessage('warning', 'Проверка была выполнена успешно, но сервер ответил с ошибкой');
+        }
     } catch (\Throwable $exception) {
         $flash->addMessage('error', 'Произошла ошибка при проверке, не удалось подключиться');
     }

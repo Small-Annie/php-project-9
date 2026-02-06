@@ -26,13 +26,15 @@ class PageChecker
 
         $crawler = new Crawler($html);
 
+        $h1Node = $crawler->filter('h1')->first();
+        $titleNode = $crawler->filter('title')->first();
+        $descriptionNode = $crawler->filter('meta[name="description"]')->first();
+
         return [
             'status_code' => $statusCode,
-            'h1' => optional($crawler->filter('h1')->first())->text(),
-            'title' => optional($crawler->filter('title')->first())->text(),
-            'description' => optional(
-                $crawler->filter('meta[name="description"]')->first()
-            )->attr('content'),
+            'h1' => optional($h1Node->count() ? $h1Node : null)->text(),
+            'title' => optional($titleNode->count() ? $titleNode : null)->text(),
+            'description' => optional($descriptionNode->count() ? $descriptionNode : null)->attr('content'),
         ];
     }
 }
