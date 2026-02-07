@@ -111,7 +111,7 @@ $app->get('/urls', function (Request $request, Response $response) {
     ]);
 })->setName('urls.index');
 
-$app->get('/urls/{id}', function (Request $request, Response $response, array $args) {
+$app->get('/urls/{id:[0-9]+}', function (Request $request, Response $response, array $args) {
     $urlRepository = $this->get(UrlRepository::class);
 
     $id = (int) $args['id'];
@@ -130,7 +130,7 @@ $app->get('/urls/{id}', function (Request $request, Response $response, array $a
     ]);
 })->setName('urls.show');
 
-$app->post('/urls/{id}/checks', function (Request $request, Response $response, array $args) {
+$app->post('/urls/{id:[0-9]+}/checks', function (Request $request, Response $response, array $args) {
     $flash = $this->get('flash');
     $urlRepository = $this->get(UrlRepository::class);
     $checkRepository = $this->get(UrlCheckRepository::class);
