@@ -34,7 +34,9 @@ class PageChecker
             'status_code' => $statusCode,
             'h1' => optional($h1Node->count() ? $h1Node : null)->text(),
             'title' => optional($titleNode->count() ? $titleNode : null)->text(),
-            'description' => optional($descriptionNode->count() ? $descriptionNode : null)->attr('content'),
+            'description' => $descriptionNode->count()
+                ? $descriptionNode->attr('content')
+                : null,
         ];
     }
 }

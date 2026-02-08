@@ -24,8 +24,11 @@ session_start();
 $container = new Container();
 
 $container->set(PDO::class, function () {
-    $databaseUrl = getenv('DATABASE_URL');
-    $parsedDatabaseUrl = parse_url($databaseUrl);
+    $databaseUrl = getenv('DATABASE_URL')
+        ?: throw new RuntimeException('DATABASE_URL is not set');
+
+    $parsedDatabaseUrl = parse_url($databaseUrl)
+        ?: throw new RuntimeException('Invalid DATABASE_URL');
 
     $dsn = sprintf(
         'pgsql:host=%s;port=%s;dbname=%s',
@@ -79,7 +82,9 @@ $app->post('/urls', function (Request $request, Response $response) {
     $flash = $this->get('flash');
     $urlRepository = $this->get(UrlRepository::class);
 
-    $data = $request->getParsedBody()['url'] ?? [];
+    $parsedBody = (array) $request->getParsedBody();
+    $data = $parsedBody['url'] ?? [];
+
     $errors = UrlValidator::validate($data);
 
     if (!empty($errors)) {
