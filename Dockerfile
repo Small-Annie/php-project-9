@@ -10,10 +10,8 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 
 WORKDIR /app
 
-COPY composer.json composer.lock ./
-
-RUN composer install --no-interaction --no-progress
-
 COPY . .
+
+RUN composer install
 
 CMD ["bash", "-c", "make start"]
