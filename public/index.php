@@ -83,6 +83,8 @@ $app->post('/urls', function (Request $request, Response $response) {
     $errors = UrlValidator::validate($data);
 
     if (!empty($errors)) {
+        $response = $response->withStatus(422);
+        
         return render($this, $request, $response, 'index.phtml', [
             'errors' => $errors,
             'url' => $data['name'] ?? ''
