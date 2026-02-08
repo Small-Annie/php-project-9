@@ -18,8 +18,8 @@
         "vlucas/valitron": "^1.4",
         "illuminate/support": "^12.46",
         "guzzlehttp/guzzle": "^7.10",
-        "symfony/dom-crawler": "^7.4",
-        "symfony/css-selector": "^7.4"
+        "symfony/dom-crawler": "^8.0",
+        "symfony/css-selector": "^8.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^4.0"
