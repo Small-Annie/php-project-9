@@ -32,5 +32,10 @@
             "src/Helpers/render.php",
             "src/Helpers/redirectTo.php"
         ]
+    },
+    "config": {
+        "platform": {
+            "php": "8.4"
+        }
     }
 }
