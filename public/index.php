@@ -37,16 +37,16 @@ $container->set(PDO::class, function () {
         ltrim($parsedDatabaseUrl['path'], '/')
     );
 
-    $conn = new PDO(
+    $connection = new PDO(
         $dsn,
         $parsedDatabaseUrl['user'] ?? null,
         $parsedDatabaseUrl['pass'] ?? null
     );
 
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-    return $conn;
+    return $connection;
 });
 
 $container->set('flash', function () {
@@ -140,7 +140,6 @@ $app->get('/urls/{id:[0-9]+}', function (Request $request, Response $response, a
 $app->post('/urls/{id:[0-9]+}/checks', function (Request $request, Response $response, array $args) {
     $flash = $this->get('flash');
     $urlRepository = $this->get(UrlRepository::class);
-    $checkRepository = $this->get(UrlCheckRepository::class);
 
     $urlId = (int) $args['id'];
     $url = $urlRepository->find($urlId);
@@ -148,6 +147,8 @@ $app->post('/urls/{id:[0-9]+}/checks', function (Request $request, Response $res
     if ($url === null) {
         throw new HttpNotFoundException($request);
     }
+
+    $checkRepository = $this->get(UrlCheckRepository::class);
 
     try {
         $pageChecker = new PageChecker();

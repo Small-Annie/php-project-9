@@ -1,8 +1,8 @@
 <?php
 
-use Slim\Routing\RouteContext;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Slim\Routing\RouteContext;
 
 function redirectTo(
     ServerRequestInterface $request,

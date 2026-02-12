@@ -13,6 +13,22 @@ class UrlRepository
         $this->pdo = $pdo;
     }
 
+    public function create(string $name, string $createdAt): int
+    {
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO urls (name, created_at)
+             VALUES (:name, :created_at)
+             RETURNING id'
+        );
+
+        $stmt->execute([
+            'name' => $name,
+            'created_at' => $createdAt
+        ]);
+
+        return (int) $stmt->fetchColumn();
+    }
+
     public function find(int $id): ?array
     {
         $stmt = $this->pdo->prepare(
@@ -48,21 +64,5 @@ class UrlRepository
         );
 
         return $stmt->fetchAll();
-    }
-
-    public function create(string $name, string $createdAt): int
-    {
-        $stmt = $this->pdo->prepare(
-            'INSERT INTO urls (name, created_at)
-             VALUES (:name, :created_at)
-             RETURNING id'
-        );
-
-        $stmt->execute([
-            'name' => $name,
-            'created_at' => $createdAt
-        ]);
-
-        return (int) $stmt->fetchColumn();
     }
 }
