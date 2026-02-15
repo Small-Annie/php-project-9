@@ -7,7 +7,7 @@
             <div class="col-8">
                 <label for="text" class="visually-hidden">Url для проверки</label>
 
-                <?php $hasError = !empty($errors); ?>
+                <?php $hasError = isset($errors['name']); ?>
 
                 <input
                     type="text"
@@ -18,7 +18,7 @@
                 >
 
                 <?php if ($hasError) : ?>
-                <div class="invalid-feedback"><?= $errors['name'][0] ?></div>
+                <div class="invalid-feedback"><?= $errors['name'] ?></div>
                 <?php endif; ?>
 
             </div>
