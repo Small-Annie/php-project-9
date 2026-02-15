@@ -1,0 +1,16 @@
+<?php if (!empty($flash)) : ?>
+    <?php
+    $alertClasses = [
+        'success' => 'alert-success',
+        'error'   => 'alert-danger',
+        'warning' => 'alert-warning',
+    ];
+    ?>
+    <?php foreach ($flash as $type => $messages) : ?>
+        <?php foreach ($messages as $message) : ?>
+            <div class="alert <?= $alertClasses[$type] ?? 'alert-secondary' ?>" role="alert">
+                <?= htmlspecialchars($message) ?>
+            </div>
+        <?php endforeach; ?>
+    <?php endforeach; ?>
+<?php endif; ?>

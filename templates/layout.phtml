@@ -12,49 +12,10 @@
 </head>
 
 <body class="min-vh-100 d-flex flex-column">
-    <header class="flex-shrink-0">
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark px-3">
-            <a class="navbar-brand" href="/">Анализатор страниц</a>
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link <?= ($activePage ?? '') === 'home' ? 'active' : '' ?>" href="/">Главная</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= ($activePage ?? '') === 'urls' ? 'active' : '' ?>" href="/urls">Сайты</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
 
-        <?php if (!empty($flash)) : ?>
-            <?php
-            $alertClasses = [
-                'success' => 'alert-success',
-                'error'   => 'alert-danger',
-                'warning' => 'alert-warning',
-            ];
-            ?>
-            <?php foreach ($flash as $type => $messages) : ?>
-                <?php foreach ($messages as $message) : ?>
-                    <div class="alert <?= $alertClasses[$type] ?? 'alert-secondary' ?>" role="alert">
-                        <?= htmlspecialchars($message) ?>
-                    </div>
-                <?php endforeach; ?>
-            <?php endforeach; ?>
-        <?php endif; ?>
+    <?php include __DIR__ . '/partials/header.phtml'; ?>
+
+    <?php include __DIR__ . '/partials/flash.phtml'; ?>
 
     <main class="flex-grow-1">
         <div class="container-lg mt-3">
@@ -62,13 +23,7 @@
         </div>
     </main>
 
-    <footer class="border-top py-3 mt-5 flex-shrink-0">
-        <div class="container-lg">
-            <div class="text-center">
-                <a href="https://hexlet.io/pages/about" target="_blank">Hexlet</a>
-            </div>
-        </div>
-    </footer>
+    <?php include __DIR__ . '/partials/footer.phtml'; ?>
 
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
