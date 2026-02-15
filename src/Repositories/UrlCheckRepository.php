@@ -53,4 +53,18 @@ class UrlCheckRepository
 
         return $stmt->fetchAll();
     }
+
+    public function findLatestChecks(): array
+    {
+        $stmt = $this->pdo->query(
+            'SELECT DISTINCT ON (url_id)
+                url_id,
+                status_code,
+                created_at AS last_check_at
+                FROM url_checks
+            ORDER BY url_id, created_at DESC'
+        );
+
+        return $stmt->fetchAll();
+    }
 }

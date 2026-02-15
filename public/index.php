@@ -110,16 +110,32 @@ $app->post('/urls', function (Request $request, Response $response) {
 
 $app->get('/urls', function (Request $request, Response $response) {
     $urlRepository = $this->get(UrlRepository::class);
+    $urlCheckRepository = $this->get(UrlCheckRepository::class);
 
     $urls = $urlRepository->getAll();
+    $latestChecks = $urlCheckRepository->findLatestChecks();
+
+    $checksByUrlId = array_column($latestChecks, null, 'url_id');
+
+    $urlsWithChecks = array_map(function ($url) use ($checksByUrlId) {
+        $check = $checksByUrlId[$url['id']] ?? null;
+
+        return [
+            'id' => $url['id'],
+            'name' => $url['name'],
+            'last_check_at' => $check['last_check_at'] ?? null,
+            'status_code'   => $check['status_code'] ?? null,
+        ];
+    }, $urls);
 
     return render($this, $request, $response, 'urls/index.phtml', [
-        'urls' => $urls
+        'urls' => $urlsWithChecks
     ]);
 })->setName('urls.index');
 
 $app->get('/urls/{id:[0-9]+}', function (Request $request, Response $response, array $args) {
     $urlRepository = $this->get(UrlRepository::class);
+    $checkRepository = $this->get(UrlCheckRepository::class);
 
     $id = (int) $args['id'];
     $url = $urlRepository->find($id);
@@ -128,7 +144,6 @@ $app->get('/urls/{id:[0-9]+}', function (Request $request, Response $response, a
         throw new HttpNotFoundException($request);
     }
 
-    $checkRepository = $this->get(UrlCheckRepository::class);
     $checks = $checkRepository->findByUrlId($id);
 
     return render($this, $request, $response, 'urls/show.phtml', [
@@ -140,6 +155,7 @@ $app->get('/urls/{id:[0-9]+}', function (Request $request, Response $response, a
 $app->post('/urls/{id:[0-9]+}/checks', function (Request $request, Response $response, array $args) {
     $flash = $this->get('flash');
     $urlRepository = $this->get(UrlRepository::class);
+    $checkRepository = $this->get(UrlCheckRepository::class);
 
     $urlId = (int) $args['id'];
     $url = $urlRepository->find($urlId);
@@ -147,8 +163,6 @@ $app->post('/urls/{id:[0-9]+}/checks', function (Request $request, Response $res
     if ($url === null) {
         throw new HttpNotFoundException($request);
     }
-
-    $checkRepository = $this->get(UrlCheckRepository::class);
 
     try {
         $pageChecker = new PageChecker();
