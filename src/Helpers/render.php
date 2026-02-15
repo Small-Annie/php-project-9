@@ -14,16 +14,16 @@ function render(
 ): ResponseInterface {
     $renderer = $container->get('renderer');
 
-    $path = $request->getUri()->getPath();
+    $routeContext = RouteContext::fromRequest($request);
+    $routeParser = $routeContext->getRouteParser();
 
-    $activePage = match ($path) {
-        '/' => 'home',
-        '/urls' => 'urls',
-        default => null,
-    };
+    $route = $routeContext->getRoute();
+    $routeName = $route?->getName();
 
     return $renderer->render($response, $template, array_merge($params, [
         'flash' => $request->getAttribute('flash', []),
-        'activePage' => $activePage,
+        'activePage' => $routeName,
+        'urlFor' => fn(string $name, array $data = [])
+        => $routeParser->urlFor($name, $data),
     ]));
 }
