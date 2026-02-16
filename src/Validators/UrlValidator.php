@@ -23,12 +23,6 @@ class UrlValidator
             return [];
         }
 
-        $formattedErrors = [];
-
-        foreach ($validator->errors() as $field => $messages) {
-            $formattedErrors[$field] = $messages[0];
-        }
-
-        return $formattedErrors;
+        return $validator->errors();
     }
 }
