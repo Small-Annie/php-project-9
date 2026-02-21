@@ -7,18 +7,16 @@
             <div class="col-8">
                 <label for="text" class="visually-hidden">Url для проверки</label>
 
-                <?php $hasError = !empty($errors); ?>
-
                 <input
                     type="text"
                     name="url[name]"
                     value="<?= htmlspecialchars($url ?? '') ?>"
-                    class="form-control form-control-lg <?= $hasError ? 'is-invalid' : '' ?>"
+                    class="form-control form-control-lg <?= isset($errors['name']) ? 'is-invalid' : '' ?>"
                     placeholder="https://www.example.com"
                 >
 
-                <?php if ($hasError) : ?>
-                <div class="invalid-feedback"><?= $errors['name'][0] ?></div>
+                <?php if (isset($errors['name'])) : ?>
+                <div class="invalid-feedback"><?= $errors['name'] ?></div>
                 <?php endif; ?>
 
             </div>

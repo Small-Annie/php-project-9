@@ -87,11 +87,16 @@ $app->post('/urls', function (Request $request, Response $response) {
 
     $errors = UrlValidator::validate($data);
 
-    if (!empty($errors)) {
+    if ($errors) {
+        $formattedErrors = array_map(
+            fn(array $messages) => $messages[0],
+            $errors
+        );
+
         $response = $response->withStatus(422);
 
         return render($this, $request, $response, 'index.phtml', [
-            'errors' => $errors,
+            'errors' => $formattedErrors,
             'url' => $data['name'] ?? ''
         ]);
     }
